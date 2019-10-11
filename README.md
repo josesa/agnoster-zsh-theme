@@ -11,7 +11,7 @@ Personal take on the great agnoster theme. Added and changed a few things to mak
   - Red ± if files are not in index
 - Time added to the right hand side of prompt
 
-![Customization demo](https://github.com/josesa/agnoster-zsh-theme/raw/screenshot.png)
+![Customization demo](https://raw.githubusercontent.com/josesa/agnoster-zsh-theme/master/screenshot_modified.png)
 
 Used with iTerm2 and [LiberationMono for Powerline](https://github.com/powerline/fonts/tree/master/LiberationMono)
 
