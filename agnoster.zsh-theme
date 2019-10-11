@@ -25,9 +25,8 @@
 ### Segments of the prompt, default order declaration
 
 typeset -aHg AGNOSTER_PROMPT_SEGMENTS=(
-    prompt_status
+    prompt_status_emoji
     prompt_context
-    prompt_virtualenv
     prompt_dir
     prompt_git
     prompt_end
@@ -38,17 +37,15 @@ typeset -aHg AGNOSTER_PROMPT_SEGMENTS=(
 
 CURRENT_BG='NONE'
 if [[ -z "$PRIMARY_FG" ]]; then
-	PRIMARY_FG=black
+  PRIMARY_FG=black
 fi
 
 # Characters
 SEGMENT_SEPARATOR="\ue0b0"
+SEGMENT_R_SEPARATOR=$'\uE0B2'
 PLUSMINUS="\u00b1"
 BRANCH="\ue0a0"
 DETACHED="\u27a6"
-CROSS="\u2718"
-LIGHTNING="\u26a1"
-GEAR="\u2699"
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -80,6 +77,49 @@ prompt_end() {
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
 
+PROMPT_EMOJI=(🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐵 🙈 🙉 🙊 🐒 🐔 🐧 \
+🐦 🐤 🐣 🐥 🐺 🐗 🐴 🦄 🐝 🐛 🐌 🐜 🦂 🐠 🐟 🐡 🐬 🐳 🐋 🐆 🐅 🐃 🐂 🚪 \
+🐄 🐪 🐫 🐘 🐐 🐏 🐑 🐎 🐖 🐀 🐁 🐓 🦃 🐕 🐩 🐈 🐇 🎋 🍂 🌾 🛁 🔑 🛌 🏯 \
+🌻 🌷 🌼 🌸 💐 🌰 🎃 🐚 🚕 🚙 🚌 🚎 🚓 🚑 🚐 🚚 🚜 🚲 🚔 🚍 🚖 🔖 🚿 🏰 \
+🚡 🚟 🚃 🚋 🚅 🚈 🚞 🚆 🚇 🚊 🚉 🚁 🛫 🛬 ⛵️ 🚤 🚀 💺 🚧 🔮 📿 💈 🔭 🔬 \
+😀 😬 😁 😃 😄 😅 😆 😇 😉 😊 🙂 🙃 😋 😌 😍 😘 😗 😙 😚 😜 😝 😛 🤑 🤓 \
+😎 🤗 😏 😶 😐 😑 😒 🙄 🤔 😳 😞 😟 😠 😔 😕 🙁 😣 😖 😯 😦 😧 😵 😲 🤐 \
+😷 🤒 🤕 😴 💤 💀 👽 🤖 😺 😸 😻 😼 😽 😾 ⚽️ 🏀 🏈 🏐 🏉 🎱 🏸 🏒 🏑 💳 \
+🏏 🏹 🎣 🚣 🏊 🏄 🛀 🚴 🚵 🏆 🎽 🏅 🎫 💎 🔧 🔩 🔫 💣 🔪 💵 💴 💶 💷 💰 \
+🎭 🎨 🎤 🎧 🎼 🎹 🎷 🎺 🎸 🎻 🎬 🎮 🎲 🎰 🎳 🍐 🍊 🍋 🍌 🍉 🍇 🍈 🍍 🍆 \
+🌽 🍠 🍯 🍞 🧀 🍗 🍖 🍤 🍳 🍔 🌭 🍕 🍝 🌮 🌯 🍜 🍲 🍥 🍱 🍛 🍙 🍚 🍘 🍢 \
+🍡 🍧 🍨 🍦 🍰 🎂 🍮 🍬 🍭 🍫 🍩 🍪 🍺 🍻 🍸 🍹 🍾 🍶 🍵 🍼 🍴 🌎 🌍 💡 \
+🌏 🚏 🚦 🚥 🏁 🌕 🌖 🌗 🌘 🌑 🌒 🌓 🌔 🌚 🌝 🌛 🌜 🌞 🌙 ⭐️ 🌟 💫 ✨ 🔦 \
+⛅️ ⛄️ 💨 💧 💦 🌊 👦 👧 👨 👩 👴 👵 👶 👱 👮 👲 👳 👷 👸 💂 💸 📻 ⏳ ⌛️ \
+🎅 👼 💆 💇 👰 🙍 🙎 🙅 🙆 💁 🙋 🙇 🙌 🙏 🚶 🏃 💪 👈 👉 👆 👇 🖖 🤘 📡 \
+✊ ✋ 👊 👌 👍 👋 👏 👐 💅 👂 👃 🚣 🛀 🏄 🏇 🏊 🙌 👈 👉 🤘 💅 📥 📤 📜 \
+👅 👂 👃 👀 👤 👶 👦 👧 👨 👩 👱 👴 👵 👲 👳 👮 👷 💂 🎅 👼 👸 📭 📦 📯 \
+👰 👯 👫 👬 👭 🙇 💁 🙅 🙆 🙋 🙎 🙍 💇 💆 💑 👪 👚 👕 👖 👔 👗 👙 👘 👡 \
+👢 👞 👟 🎩 🎓 👑 👝 👛 👜 💼 👓 💍 🌂 📱 📲 💻 🗿 🎏 🎀 🎁 🎊 🎉 🎎 📫 \
+📬 💽 💾 💿 📀 📼 📷 📸 📹 📟 📠 📺 🏤 🏥 🏦 🏨 🏪 🏫 🅿️ 🗽 🏠 🏡 🏢 🏣 \
+🎐 🎌 📩 📨 📧 💌 📪 🎑 🗻 ⛺️ 🌈 🎡 🎢 🎠 🌁 🗼 🏭 🀄️ ⛲️ ⛪ ⛲ ⛺ ⛵ ⛅ \
+📃 📑 📊 📈 📉 📄 📅 📆 📇 📋 📁 📂 📰 📓 📘 📙 📔 ⛄ ⚽ 🎿 💊 💉 🚄 🚢 \
+📒 📖 🔗 📎 📐 📏 🔐 🔒 🔓 🔏 📝 🔍 🔎 💛 💙 💜 💕 💞 ⌛ ⌚ 🀄 ⭐ 📣 📢 \
+💓 💗 💖 💘 💝 💟 🔯 🕎 🛐 ⛎ 🆔 📴 📳 🆚 ❕ ❔ 🔅 🔆 🔱 🚸 💠 🌀 ➿ 🔕 \
+🌐 🏧 🛂 🛃 🛄 🛅 🚭 🚾 🚰 🚹 🚺 🚼 🚻 🚮 🎦 📶 🈁 🆖 🆗 🆙 🆒 🆕 🆓 🔟 \
+🔔 🃏 💭 💬 🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚 🕛 🕜 🕝 🕞 🕟 🕠 🕡 🕣 🕤 \
+🕥 🕦 🕧 
+)
+
+ERROR_EMOJI=(🔥 🚽 👎 💩 🚒 🚨 ⛽ 🔴 🆘 ⛔️ 📛 🚫 ❌ ⭕️ 💢 🚷 🚯 🚳 🚱 🔞 \
+📵 ❗️ ❓ 💔 📕 📮 👹 👺 🔻 🔺 🏮 😡 
+)
+
+prompt_status_emoji() {
+  local symbols
+  if [[ $RETVAL -ne 0 ]]; then
+    symbols="$ERROR_EMOJI[$RANDOM%$#ERROR_EMOJI+1]"
+  else
+    symbols="$PROMPT_EMOJI[$RANDOM%$#PROMPT_EMOJI+1]"
+  fi
+  [[ -n "$symbols" ]] && prompt_segment $PRIMARY_FG default "$symbols "
+}
+
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   local user=`whoami`
@@ -95,15 +135,19 @@ prompt_git() {
   is_dirty() {
     test -n "$(git status --porcelain --ignore-submodules)"
   }
+  has_untracked() {
+    test -n "$(git ls-files --other --exclude-standard)"
+  }
   ref="$vcs_info_msg_0_"
   if [[ -n "$ref" ]]; then
+    color=green
     if is_dirty; then
       color=yellow
-      ref="${ref} $PLUSMINUS"
-    else
-      color=green
-      ref="${ref} "
+      if has_untracked; then
+        ref="${ref}%{%F{red}%}$PLUSMINUS%f"
+      fi
     fi
+    ref="${ref} "
     if [[ "${ref/.../}" == "$ref" ]]; then
       ref="$BRANCH $ref"
     else
@@ -119,29 +163,6 @@ prompt_dir() {
   prompt_segment blue $PRIMARY_FG ' %~ '
 }
 
-# Status:
-# - was there an error
-# - am I root
-# - are there background jobs?
-prompt_status() {
-  local symbols
-  symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}$CROSS"
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}$LIGHTNING"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}$GEAR"
-
-  [[ -n "$symbols" ]] && prompt_segment $PRIMARY_FG default " $symbols "
-}
-
-# Display current virtual environment
-prompt_virtualenv() {
-  if [[ -n $VIRTUAL_ENV ]]; then
-    color=cyan
-    prompt_segment $color $PRIMARY_FG
-    print -Pn " $(basename $VIRTUAL_ENV) "
-  fi
-}
-
 ## Main prompt
 prompt_agnoster_main() {
   RETVAL=$?
@@ -153,7 +174,9 @@ prompt_agnoster_main() {
 
 prompt_agnoster_precmd() {
   vcs_info
+  local a=$RANDOM
   PROMPT='%{%f%b%k%}$(prompt_agnoster_main) '
+  RPROMPT="%f "'%*'" "
 }
 
 prompt_agnoster_setup() {
@@ -165,8 +188,10 @@ prompt_agnoster_setup() {
   add-zsh-hook precmd prompt_agnoster_precmd
 
   zstyle ':vcs_info:*' enable git
-  zstyle ':vcs_info:*' check-for-changes false
-  zstyle ':vcs_info:git*' formats '%b'
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' stagedstr "%{%F{085}%}●%f"
+  zstyle ':vcs_info:*' unstagedstr "%{%F{red}%}●%f"
+  zstyle ':vcs_info:git*' formats '%b %u%c'
   zstyle ':vcs_info:git*' actionformats '%b (%a)'
 }
 

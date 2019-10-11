@@ -1,3 +1,24 @@
+# emoji.agnoster.zsh-theme
+
+Personal take on the great agnoster theme. Added and changed a few things to make it more suitable for my flow.
+
+- Added status emoji!
+- Remove unused segments like virtual env (Don't use them)
+- Git
+  - branch name background turns yellow if working directory dirty
+  - Red dot if files are changed
+  - Green dot if files are added to staging area
+  - Red ± if files are not in index
+- Time added to the right hand side of prompt
+
+![Customization demo](https://github.com/josesa/agnoster-zsh-theme/raw/screenshot.png)
+
+Used with iTerm2 and [LiberationMono for Powerline](https://github.com/powerline/fonts/tree/master/LiberationMono)
+
+Original readme contents below:
+
+-- 
+
 # agnoster.zsh-theme
 
 A ZSH theme optimized for people who use:
